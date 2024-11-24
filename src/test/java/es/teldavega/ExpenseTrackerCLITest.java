@@ -1,6 +1,9 @@
-package org.example;
+package es.teldavega;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +11,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,24 +20,29 @@ class ExpenseTrackerCLITest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
     private final InputStream originalIn = System.in;
+    private static final Logger log = LogManager.getLogger(ExpenseTrackerCLITest.class);
 
     @BeforeEach
     void setUp() {
+        log.info("Clearing output content");
         System.setOut(new PrintStream(outContent));
     }
 
     @AfterEach
     void tearDown() {
+        log.info("Resetting output content");
         System.setOut(originalOut);
         System.setIn(originalIn);
     }
 
     @Test
     void testAddExpense() {
+        log.info("Testing add expense");
         String[] args = {"add", "--description", "food", "--amount", "10"};
         ExpenseTrackerCLI.main(args);
         String expected = "Expense added successfully (ID: 1)" + System.lineSeparator();
         assertEquals(expected, outContent.toString());
+        outContent.reset();
         args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
         ExpenseTrackerCLI.main(args);
         expected = "Expense added successfully (ID: 2)" + System.lineSeparator();
