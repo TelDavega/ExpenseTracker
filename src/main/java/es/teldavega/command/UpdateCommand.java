@@ -4,16 +4,21 @@ import es.teldavega.expense.ExpenseManager;
 
 import java.io.IOException;
 
-public class UpdateCommand implements Command {
+public class UpdateCommand extends Command {
 
-    private ExpenseManager expenseManager;
 
     public UpdateCommand(ExpenseManager expenseManager) {
-        this.expenseManager = expenseManager;
+        super(expenseManager);
     }
 
     @Override
     public void execute(String[] args) throws IOException {
+
+        if (args.length < 2) {
+            System.err.println("No arguments provided. Please provide an ID.");
+            return;
+        }
+
         for (int i = 1; i < args.length; i++) {
             if (args[i].equals("--id")) {
                 int id = Integer.parseInt(args[i + 1]);

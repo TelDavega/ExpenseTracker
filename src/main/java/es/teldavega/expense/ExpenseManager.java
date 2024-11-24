@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import es.teldavega.command.AddCommand;
 import es.teldavega.command.Command;
+import es.teldavega.command.DeleteCommand;
 import es.teldavega.command.UpdateCommand;
 
 import java.io.*;
@@ -32,6 +33,7 @@ public class ExpenseManager {
     private void registerCommands() {
         commands.put("add", new AddCommand(this));
         commands.put("update", new UpdateCommand(this));
+        commands.put("delete", new DeleteCommand(this));
     }
 
     public void executeCommand(String commandName, String[] args) throws IOException {

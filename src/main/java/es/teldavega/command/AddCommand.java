@@ -6,12 +6,11 @@ import es.teldavega.expense.ExpenseManager;
 import java.io.IOException;
 import java.util.Date;
 
-public class AddCommand implements Command {
+public class AddCommand extends Command {
 
-    private final ExpenseManager expenseManager;
 
     public AddCommand(ExpenseManager expenseManager) {
-        this.expenseManager = expenseManager;
+        super(expenseManager);
     }
 
     @Override
