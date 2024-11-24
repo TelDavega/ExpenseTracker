@@ -1,15 +1,7 @@
 package es.teldavega;
 
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import es.teldavega.expense.ExpenseManager;
 
 public class ExpenseTrackerCLI {
 
@@ -24,22 +16,7 @@ public class ExpenseTrackerCLI {
         ExpenseManager expenseManager = new ExpenseManager();
 
         String command = args[0];
-        switch (command) {
-            case "add":
-                expenseManager.addExpense(args);
-                break;
-            case "update":
-//                updateExpense(args);
-                break;
-            case "delete":
-//                deleteExpense(args);
-                break;
-            case "list":
-//                listExpenses(args);
-                break;
-            default:
-                System.err.println("Invalid command. Please provide a valid command.");
-        }
+        expenseManager.executeCommand(command, args);
     }
 
 

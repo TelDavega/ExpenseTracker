@@ -1,4 +1,4 @@
-package es.teldavega;
+package es.teldavega.expense;
 
 import java.util.Date;
 
