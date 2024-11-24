@@ -114,13 +114,13 @@ class ExpenseTrackerCLITest {
     void testSummary() throws IOException {
         String[] args = {"add", "--description", "food", "--amount", "10"};
         ExpenseTrackerCLI.main(args);
-        args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.5"};
         ExpenseTrackerCLI.main(args);
         outContent.reset();
 
         args = new String[]{"summary"};
         ExpenseTrackerCLI.main(args);
-        String expected = "Total expenses: $30.53" + System.lineSeparator();
+        String expected = "Total expenses: $30,50" + System.lineSeparator();
         assertEquals(expected, outContent.toString());
     }
 

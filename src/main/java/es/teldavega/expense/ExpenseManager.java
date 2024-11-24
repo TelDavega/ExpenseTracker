@@ -32,6 +32,7 @@ public class ExpenseManager {
         commands.put("update", new UpdateCommand(this));
         commands.put("delete", new DeleteCommand(this));
         commands.put("list", new ListCommand(this));
+        commands.put("summary", new SummaryCommand(this));
     }
 
     public void executeCommand(String commandName, String[] args) throws IOException {
