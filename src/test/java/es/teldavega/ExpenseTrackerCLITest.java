@@ -138,7 +138,7 @@ class ExpenseTrackerCLITest {
 
         args = new String[]{"summary", "--month", String.valueOf(currentMonthNumber)};
         ExpenseTrackerCLI.main(args);
-        String expected = "Total expenses for month " + currentMonth + ": $30.53" + System.lineSeparator();
+        String expected = "Total expenses for month " + currentMonth + ": $30,53" + System.lineSeparator();
         assertEquals(expected, outContent.toString());
     }
 
