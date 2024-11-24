@@ -28,7 +28,8 @@ public class SummaryCommand extends Command {
                 Calendar calendar = Calendar.getInstance();
                 for (Expense expense : expenseManager.getExpenses().values()) {
                     calendar.setTime(expense.getDate());
-                    if (calendar.get(Calendar.MONTH) + 1 == month) {
+                    if ((calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR))
+                            && (calendar.get(Calendar.MONTH) + 1 == month)) {
                         total += expense.getAmount();
                     }
                 }
