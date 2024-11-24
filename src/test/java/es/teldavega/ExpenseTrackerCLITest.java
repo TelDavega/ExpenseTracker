@@ -39,7 +39,7 @@ class ExpenseTrackerCLITest {
     }
 
     @Test
-    void testAddExpense() {
+    void testAddExpense() throws IOException {
         String[] args = {"add", "--description", "food", "--amount", "10"};
         ExpenseTrackerCLI.main(args);
         String expected = "Expense added successfully (ID: 1)" + System.lineSeparator();
@@ -52,7 +52,7 @@ class ExpenseTrackerCLITest {
     }
 
     @Test
-    void testUpdateExpense() {
+    void testUpdateExpense() throws IOException {
         String[] args = {"add", "--description", "food", "--amount", "10"};
         ExpenseTrackerCLI.main(args);
         outContent.reset();
@@ -74,7 +74,7 @@ class ExpenseTrackerCLITest {
     }
 
     @Test
-    void testDeleteExpense() {
+    void testDeleteExpense() throws IOException {
         String[] args = {"add", "--description", "food", "--amount", "10"};
         ExpenseTrackerCLI.main(args);
         outContent.reset();
@@ -86,7 +86,7 @@ class ExpenseTrackerCLITest {
     }
 
     @Test
-    void testListExpenses() {
+    void testListExpenses() throws IOException {
         String[] args = {"add", "--description", "food", "--amount", "10"};
         ExpenseTrackerCLI.main(args);
         args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
@@ -102,7 +102,7 @@ class ExpenseTrackerCLITest {
     }
 
     @Test
-    void testSummary() {
+    void testSummary() throws IOException {
         String[] args = {"add", "--description", "food", "--amount", "10"};
         ExpenseTrackerCLI.main(args);
         args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
@@ -116,7 +116,7 @@ class ExpenseTrackerCLITest {
     }
 
     @Test
-    void testSummaryByMonth() {
+    void testSummaryByMonth() throws IOException {
         Calendar calendar = Calendar.getInstance();
         int currentMonthNumber = calendar.get(Calendar.MONTH) + 1;
         String currentMonth = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);

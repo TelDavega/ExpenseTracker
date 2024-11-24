@@ -3,6 +3,7 @@ package es.teldavega.command;
 import es.teldavega.expense.Expense;
 import es.teldavega.expense.ExpenseManager;
 
+import java.io.IOException;
 import java.util.Date;
 
 public class AddCommand implements Command {
@@ -14,7 +15,7 @@ public class AddCommand implements Command {
     }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws IOException {
         int id = expenseManager.getExpenses().size() + 1;
         String description = null;
         double amount = 0;
