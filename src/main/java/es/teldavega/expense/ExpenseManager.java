@@ -2,10 +2,7 @@ package es.teldavega.expense;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import es.teldavega.command.AddCommand;
-import es.teldavega.command.Command;
-import es.teldavega.command.DeleteCommand;
-import es.teldavega.command.UpdateCommand;
+import es.teldavega.command.*;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -34,6 +31,7 @@ public class ExpenseManager {
         commands.put("add", new AddCommand(this));
         commands.put("update", new UpdateCommand(this));
         commands.put("delete", new DeleteCommand(this));
+        commands.put("list", new ListCommand(this));
     }
 
     public void executeCommand(String commandName, String[] args) throws IOException {
