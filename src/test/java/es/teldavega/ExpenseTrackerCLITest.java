@@ -8,8 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -20,24 +24,22 @@ class ExpenseTrackerCLITest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
     private final InputStream originalIn = System.in;
-    private static final Logger log = LogManager.getLogger(ExpenseTrackerCLITest.class);
 
     @BeforeEach
-    void setUp() {
-        log.info("Clearing output content");
+    void setUp() throws IOException {
+        Path path = Paths.get("expenses.json");
+        Files.deleteIfExists(path);
         System.setOut(new PrintStream(outContent));
     }
 
     @AfterEach
     void tearDown() {
-        log.info("Resetting output content");
         System.setOut(originalOut);
         System.setIn(originalIn);
     }
 
     @Test
     void testAddExpense() {
-        log.info("Testing add expense");
         String[] args = {"add", "--description", "food", "--amount", "10"};
         ExpenseTrackerCLI.main(args);
         String expected = "Expense added successfully (ID: 1)" + System.lineSeparator();
