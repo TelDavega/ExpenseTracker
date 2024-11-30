@@ -1,14 +1,15 @@
 package es.teldavega.expense;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Expense {
     private int id;
     private String description;
-    private double amount;
+    private BigDecimal amount;
     private Date date;
 
-    public Expense(int id, String description, double amount, Date date) {
+    public Expense(int id, String description, BigDecimal amount, Date date) {
         this.id = id;
         this.description = description;
         this.amount = amount;
@@ -31,11 +32,11 @@ public class Expense {
         this.description = description;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

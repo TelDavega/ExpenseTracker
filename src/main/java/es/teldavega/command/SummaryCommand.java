@@ -4,6 +4,7 @@ import es.teldavega.expense.Expense;
 import es.teldavega.expense.ExpenseManager;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -24,13 +25,13 @@ public class SummaryCommand extends Command {
         if (args.length > 1) {
             if (args[1].equals("--month")) {
                 int month = Integer.parseInt(args[2]);
-                double total = 0;
+                BigDecimal total = BigDecimal.ZERO;
                 Calendar calendar = Calendar.getInstance();
                 for (Expense expense : expenseManager.getExpenses().values()) {
                     calendar.setTime(expense.getDate());
                     if ((calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR))
                             && (calendar.get(Calendar.MONTH) + 1 == month)) {
-                        total += expense.getAmount();
+                        total = total.add(expense.getAmount());
                     }
                 }
                 System.out.printf("Total expenses for month %s: $%.2f%n", calendar.getDisplayName(Calendar.MONTH,
@@ -42,9 +43,9 @@ public class SummaryCommand extends Command {
             }
         }
 
-        double total = 0;
+        BigDecimal total = BigDecimal.ZERO;
         for (Expense expense : expenseManager.getExpenses().values()) {
-            total += expense.getAmount();
+            total = total.add(expense.getAmount());
         }
         System.out.printf("Total expenses: $%.2f%n", total);
     }

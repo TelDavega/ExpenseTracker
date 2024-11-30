@@ -3,6 +3,7 @@ package es.teldavega.command;
 import es.teldavega.expense.ExpenseManager;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class UpdateCommand extends Command {
 
@@ -24,15 +25,15 @@ public class UpdateCommand extends Command {
                 int id = Integer.parseInt(args[i + 1]);
                 if (expenseManager.getExpenses().containsKey(id)) {
                     String description = null;
-                    double amount = 0;
+                    BigDecimal amount = BigDecimal.ZERO;
                     for (int j = i + 2; j < args.length; j++) {
                         if (args[j].equals("--description")) {
                             description = args[j + 1];
                         } else if (args[j].equals("--amount")) {
-                            amount = Double.parseDouble(args[j + 1]);
+                            amount = new BigDecimal(args[j + 1]);
                         }
                     }
-                    if (description == null && amount == 0) {
+                    if (description == null && BigDecimal.ZERO.equals(amount)) {
                         System.err.println("Description and amount are required");
                         return;
                     }
@@ -40,7 +41,7 @@ public class UpdateCommand extends Command {
                         expenseManager.getExpenses().get(id).setDescription(description);
                     }
 
-                    if (amount != 0) {
+                    if (!amount.equals(BigDecimal.ZERO)) {
                         expenseManager.getExpenses().get(id).setAmount(amount);
                     }
 

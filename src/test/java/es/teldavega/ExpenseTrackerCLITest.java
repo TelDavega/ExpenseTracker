@@ -1,9 +1,6 @@
 package es.teldavega;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +47,38 @@ class ExpenseTrackerCLITest {
         args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
         ExpenseTrackerCLI.main(args);
         expected = "Expense added successfully (ID: 2)" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    void testAddExpenseWithInvalidAmount() throws IOException {
+        String[] args = {"add", "--description", "food", "--amount", "10.123"};
+        ExpenseTrackerCLI.main(args);
+        String expected = "Invalid amount" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    void testAddExpenseWithInvalidDescription() throws IOException {
+        String[] args = {"add", "--description", "", "--amount", "10"};
+        ExpenseTrackerCLI.main(args);
+        String expected = "Invalid description" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    void testAddExpenseWithInvalidArguments() throws IOException {
+        String[] args = {"add", "--description", "food"};
+        ExpenseTrackerCLI.main(args);
+        String expected = "Description and amount are required" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    void testAddExpenseNegativeAmount() throws IOException {
+        String[] args = {"add", "--description", "food", "--amount", "-10"};
+        ExpenseTrackerCLI.main(args);
+        String expected = "Invalid amount" + System.lineSeparator();
         assertEquals(expected, outContent.toString());
     }
 
