@@ -1,5 +1,6 @@
 package es.teldavega.command;
 
+import es.teldavega.arguments.ArgumentParser;
 import es.teldavega.expense.ExpenseManager;
 
 import java.io.IOException;
@@ -13,45 +14,46 @@ public class UpdateCommand extends Command {
     }
 
     @Override
-    public void execute(String[] args) throws IOException {
+    public void performExecute(String[] args) throws IOException {
+
+        ArgumentParser parser = new ArgumentParser(args);
+        int id = parser.getInt("--id");
+        String description = parser.getString("--description");
+        BigDecimal amount = parser.getBigDecimal("--amount");
+
+        if (description != null) {
+            expenseManager.getExpenses().get(id).setDescription(description);
+        }
+
+        if (amount != null) {
+            expenseManager.getExpenses().get(id).setAmount(amount);
+        }
+
+        System.out.println("Expense updated successfully (ID: " + id + ")");
+        expenseManager.writeExpensesFile();
+
+    }
+
+    @Override
+    public boolean validArguments(String[] args) {
 
         if (args.length < 2) {
-            System.err.println("No arguments provided. Please provide an ID.");
-            return;
+            System.out.println("No arguments provided. Please provide an ID.");
+            return false;
         }
 
-        for (int i = 1; i < args.length; i++) {
-            if (args[i].equals("--id")) {
-                int id = Integer.parseInt(args[i + 1]);
-                if (expenseManager.getExpenses().containsKey(id)) {
-                    String description = null;
-                    BigDecimal amount = BigDecimal.ZERO;
-                    for (int j = i + 2; j < args.length; j++) {
-                        if (args[j].equals("--description")) {
-                            description = args[j + 1];
-                        } else if (args[j].equals("--amount")) {
-                            amount = new BigDecimal(args[j + 1]);
-                        }
-                    }
-                    if (description == null && BigDecimal.ZERO.equals(amount)) {
-                        System.err.println("Description and amount are required");
-                        return;
-                    }
-                    if (description != null) {
-                        expenseManager.getExpenses().get(id).setDescription(description);
-                    }
-
-                    if (!amount.equals(BigDecimal.ZERO)) {
-                        expenseManager.getExpenses().get(id).setAmount(amount);
-                    }
-
-                    System.out.println("Expense updated successfully (ID: " + id + ")");
-                    expenseManager.writeExpensesFile();
-                } else {
-                    System.err.println("Expense not found (ID: " + id + ")");
-                }
-                return;
-            }
+        ArgumentParser parser = new ArgumentParser(args);
+        int id = parser.getInt("--id");
+        if (!expenseManager.getExpenses().containsKey(id)) {
+            System.out.println("Expense not found (ID: " + id + ")");
+            return false;
         }
+        String description = parser.getString("--description");
+        BigDecimal amount = parser.getBigDecimal("--amount");
+        if (description == null && amount == null) {
+            System.out.println("Description or amount are required");
+            return false;
+        }
+        return true;
     }
 }

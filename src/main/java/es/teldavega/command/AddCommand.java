@@ -1,5 +1,6 @@
 package es.teldavega.command;
 
+import es.teldavega.arguments.ArgumentParser;
 import es.teldavega.expense.Expense;
 import es.teldavega.expense.ExpenseManager;
 
@@ -15,23 +16,21 @@ public class AddCommand extends Command {
     }
 
     @Override
-    public void execute(String[] args) throws IOException {
+    public void performExecute(String[] args) throws IOException {
+        ArgumentParser parser = new ArgumentParser(args);
         int id = expenseManager.getExpenses().size() + 1;
-        String description = null;
-        BigDecimal amount = BigDecimal.ZERO;
-        for (int i = 1; i < args.length; i++) {
-            if (args[i].equals("--description")) {
-                description = args[i + 1];
-                if (!validDescription(description)) return;
-            } else if (args[i].equals("--amount")) {
-                amount = new BigDecimal(args[i + 1]);
-                if (!validAmount(amount)) return;
-            }
-        }
-
-        if (!validArguments(description, amount)) return;
-
+        String description = parser.getString("--description");
+        BigDecimal amount = parser.getBigDecimal("--amount");
         addExpense(id, description, amount);
+    }
+
+    @Override
+    public boolean validArguments(String[] args) {
+        ArgumentParser parser = new ArgumentParser(args);
+        String description = parser.getString("--description");
+        BigDecimal amount = parser.getBigDecimal("--amount");
+
+        return validArguments(description, amount);
     }
 
 
@@ -42,16 +41,17 @@ public class AddCommand extends Command {
         expenseManager.writeExpensesFile();
     }
 
+
     private boolean validArguments(String description, BigDecimal amount) {
-        if (description == null || BigDecimal.ZERO.equals(amount)) {
+        if (description == null || BigDecimal.ZERO.equals(amount) || amount == null) {
             System.out.println("Description and amount are required");
             return false;
         }
-        return true;
+        return validAmount(amount) && validDescription(description);
     }
 
     private boolean validAmount(BigDecimal amount) {
-        if (amount.scale() > 2 || amount.compareTo(BigDecimal.ZERO) < 0) {
+        if ((amount.scale() > 2 || amount.compareTo(BigDecimal.ZERO) <= 0)) {
             System.out.println("Invalid amount");
             return false;
         }
@@ -59,7 +59,7 @@ public class AddCommand extends Command {
     }
 
     private boolean validDescription(String description) {
-        if ("".equals(description)) {
+        if ("".equals(description) || description == null) {
             System.out.println("Invalid description");
             return false;
         }
