@@ -10,7 +10,7 @@ public class ListCommand extends Command {
     }
 
     @Override
-    public void execute(String[] args) {
+    public void performExecute(String[] args) {
         if (expenseManager.getExpenses().isEmpty()) {
             System.out.println("No expenses found");
             return;
@@ -24,5 +24,11 @@ public class ListCommand extends Command {
         expenseManager.getExpenses().values().forEach(expense -> System.out.printf(rowFormat, expense.getId(),
                 dateFormat.format(expense.getDate()),
                 expense.getDescription(), expense.getAmount()));
+    }
+
+    @Override
+    public boolean validArguments(String[] args) {
+        // No arguments are required for this command
+        return true;
     }
 }

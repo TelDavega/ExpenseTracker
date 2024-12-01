@@ -11,8 +11,16 @@ public abstract class Command {
         this.expenseManager = expenseManager;
     }
 
+    public final void execute(String[] args) throws IOException {
+        if (validArguments(args)) {
+            performExecute(args);
+        }
+    }
 
-    public abstract void execute(String[] args) throws IOException;
+
+    public abstract void performExecute(String[] args) throws IOException;
+
+    public abstract boolean validArguments(String[] args);
 
 
 }

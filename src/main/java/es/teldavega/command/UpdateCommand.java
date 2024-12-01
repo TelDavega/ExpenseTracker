@@ -13,7 +13,7 @@ public class UpdateCommand extends Command {
     }
 
     @Override
-    public void execute(String[] args) throws IOException {
+    public void performExecute(String[] args) throws IOException {
 
         if (args.length < 2) {
             System.err.println("No arguments provided. Please provide an ID.");
@@ -53,5 +53,10 @@ public class UpdateCommand extends Command {
                 return;
             }
         }
+    }
+
+    @Override
+    public boolean validArguments(String[] args) {
+        return true;
     }
 }
