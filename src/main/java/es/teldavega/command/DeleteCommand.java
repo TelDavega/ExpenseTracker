@@ -1,6 +1,6 @@
 package es.teldavega.command;
 
-import es.teldavega.arguments.ArgumentParser;
+import es.teldavega.arguments.DefaultArgumentParser;
 import es.teldavega.expense.ExpenseManager;
 
 import java.io.IOException;
@@ -12,19 +12,15 @@ public class DeleteCommand extends Command {
 
     @Override
     public void performExecute(String[] args) throws IOException {
-        ArgumentParser parser = new ArgumentParser(args);
-        Integer id = parser.getInt("--id");
-
+        Integer id = parser.getInt("id");
         expenseManager.getExpenses().remove(id);
         System.out.println("Expense deleted successfully");
         expenseManager.writeExpensesFile();
-
     }
 
     @Override
     public boolean validArguments(String[] args) {
-        ArgumentParser parser = new ArgumentParser(args);
-        Integer id = parser.getInt("--id");
+        Integer id = parser.getInt("id");
         if (id == null) {
             System.out.println("No arguments provided. Please provide an ID.");
             return false;

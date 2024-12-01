@@ -1,6 +1,6 @@
 package es.teldavega.command;
 
-import es.teldavega.arguments.ArgumentParser;
+import es.teldavega.arguments.DefaultArgumentParser;
 import es.teldavega.expense.Expense;
 import es.teldavega.expense.ExpenseManager;
 
@@ -16,10 +16,8 @@ public class SummaryCommand extends Command {
 
     @Override
     public void performExecute(String[] args) {
-        ArgumentParser parser = new ArgumentParser(args);
-
-        if (parser.contains("--month")) {
-            int month = parser.getInt("--month");
+        if (parser.contains("month")) {
+            int month = parser.getInt("month");
             BigDecimal total = BigDecimal.ZERO;
             Calendar calendar = Calendar.getInstance();
 
@@ -51,4 +49,6 @@ public class SummaryCommand extends Command {
         }
         return true;
     }
+
+
 }

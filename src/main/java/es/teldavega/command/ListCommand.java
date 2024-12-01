@@ -31,4 +31,9 @@ public class ListCommand extends Command {
         // No arguments are required for this command
         return true;
     }
+
+    @Override
+    public void setParser(String[] args) {
+        // No parser is required for this command
+    }
 }

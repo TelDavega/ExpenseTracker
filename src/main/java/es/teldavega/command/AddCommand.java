@@ -1,6 +1,6 @@
 package es.teldavega.command;
 
-import es.teldavega.arguments.ArgumentParser;
+import es.teldavega.arguments.DefaultArgumentParser;
 import es.teldavega.expense.Expense;
 import es.teldavega.expense.ExpenseManager;
 
@@ -17,18 +17,16 @@ public class AddCommand extends Command {
 
     @Override
     public void performExecute(String[] args) throws IOException {
-        ArgumentParser parser = new ArgumentParser(args);
         int id = expenseManager.getExpenses().size() + 1;
-        String description = parser.getString("--description");
-        BigDecimal amount = parser.getBigDecimal("--amount");
+        String description = parser.getString("description");
+        BigDecimal amount = parser.getBigDecimal("amount");
         addExpense(id, description, amount);
     }
 
     @Override
     public boolean validArguments(String[] args) {
-        ArgumentParser parser = new ArgumentParser(args);
-        String description = parser.getString("--description");
-        BigDecimal amount = parser.getBigDecimal("--amount");
+        String description = parser.getString("description");
+        BigDecimal amount = parser.getBigDecimal("amount");
 
         return validArguments(description, amount);
     }
