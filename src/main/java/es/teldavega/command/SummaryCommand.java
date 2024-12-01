@@ -16,8 +16,17 @@ public class SummaryCommand extends Command {
 
     @Override
     public void performExecute(String[] args) {
+        if (expenseManager.getExpenses().isEmpty()) {
+            System.out.println("No expenses found");
+            return;
+        }
+
         if (parser.contains("month")) {
             int month = parser.getInt("month");
+            if (month < 1 || month > 12) {
+                System.out.println("Invalid month");
+                return;
+            }
             BigDecimal total = BigDecimal.ZERO;
             Calendar calendar = Calendar.getInstance();
 
@@ -27,6 +36,13 @@ public class SummaryCommand extends Command {
                         && (calendar.get(Calendar.MONTH) + 1 == month)) {
                     total = total.add(expense.getAmount());
                 }
+            }
+
+            if (total.equals(BigDecimal.ZERO)) {
+                calendar.set(Calendar.MONTH, month - 1);
+                System.out.printf("No expenses found for month %s%n", calendar.getDisplayName(Calendar.MONTH,
+                        Calendar.LONG, Locale.ENGLISH));
+                return;
             }
 
             System.out.printf("Total expenses for month %s: $%.2f%n", calendar.getDisplayName(Calendar.MONTH,
@@ -43,10 +59,7 @@ public class SummaryCommand extends Command {
 
     @Override
     public boolean validArguments(String[] args) {
-        if (expenseManager.getExpenses().isEmpty()) {
-            System.out.println("No expenses found");
-            return false;
-        }
+
         return true;
     }
 

@@ -26,7 +26,14 @@ public class AddCommand extends Command {
     @Override
     public boolean validArguments(String[] args) {
         String description = parser.getString("description");
-        BigDecimal amount = parser.getBigDecimal("amount");
+        BigDecimal amount = null;
+
+        try {
+            amount = parser.getBigDecimal("amount");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
 
         return validArguments(description, amount);
     }

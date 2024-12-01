@@ -21,7 +21,14 @@ public class DefaultArgumentParser extends ArgumentParser {
 
     public BigDecimal getBigDecimal(String bigDecimal) {
         String value = arguments.get(key + bigDecimal);
-        return value != null ? new BigDecimal(value) : null;
+        if (value == null) {
+            return null;
+        }
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+           throw new IllegalArgumentException("Invalid amount");
+        }
     }
 
 }

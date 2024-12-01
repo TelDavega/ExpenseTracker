@@ -36,20 +36,55 @@ public class UpdateCommand extends Command {
     @Override
     public boolean validArguments(String[] args) {
 
+        if (!validArgumentsLength(args)) return false;
+
+        int id = parser.getInt("id");
+        if (!validId(id)) return false;
+        String description = parser.getString("description");
+        BigDecimal amount = null;
+        try {
+            amount = parser.getBigDecimal("amount");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        if (!validAmount(amount)) return false;
+
+        if (description == null && amount == null) {
+            System.out.println("Description or amount are required");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validAmount(BigDecimal amount) {
+        if (amount != null) {
+            int scale = amount.scale();
+            if ((scale > 2 || amount.compareTo(BigDecimal.ZERO) <= 0)) {
+                System.out.println("Invalid amount");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validId(int id) {
+        if (!expenseManager.getExpenses().containsKey(id)) {
+            System.out.println("Expense not found (ID: " + id + ")");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validArgumentsLength(String[] args) {
         if (args.length < 2) {
             System.out.println("No arguments provided. Please provide an ID.");
             return false;
         }
 
-        int id = parser.getInt("id");
-        if (!expenseManager.getExpenses().containsKey(id)) {
-            System.out.println("Expense not found (ID: " + id + ")");
-            return false;
-        }
-        String description = parser.getString("description");
-        BigDecimal amount = parser.getBigDecimal("amount");
-        if (description == null && amount == null) {
-            System.out.println("Description or amount are required");
+        if (args.length > 7) {
+            System.out.println("Too many arguments provided. Please provide an ID, description, and/or amount.");
             return false;
         }
         return true;
