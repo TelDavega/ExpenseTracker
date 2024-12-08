@@ -152,6 +152,34 @@ class ExpenseTrackerCLITest {
     }
 
     @Test
+    void testListExpensesByCategory() throws IOException {
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
+        ExpenseTrackerCLI.main(args);
+        Date date1 = new Date();
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "FOOD"};
+        ExpenseTrackerCLI.main(args);
+        Date date2 = new Date();
+        outContent.reset();
+        args = new String[]{"add", "--description", "TV", "--amount", "859.99", "--category", "entertainment"};
+        ExpenseTrackerCLI.main(args);
+        Date date3 = new Date();
+        outContent.reset();
+
+        args = new String[]{"list", "--category", "food"};
+        ExpenseTrackerCLI.main(args);
+        String headerFormat = "%-5s %-27s %-20s %-20s %-10s%n";
+        String rowFormat = "%-5d %-27s %-20s %-20s $%-9.2f%n";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm z yyyy");
+
+        String expectedHeader = String.format(headerFormat, "ID", "        Date        ", "Description  ","Category  ",
+                "Amount ");
+        String expectedRow1 = String.format(rowFormat, 1, dateFormat.format(date1), "food", "Food",  10.0);
+        String expectedRow2 = String.format(rowFormat, 2, dateFormat.format(date2), "dinner", "Food", 20.53);
+        String expected = expectedHeader + expectedRow1 + expectedRow2;
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
     void testListExpensesEmpty() throws IOException {
         String[] args = {"list"};
         ExpenseTrackerCLI.main(args);
@@ -186,6 +214,26 @@ class ExpenseTrackerCLITest {
         outContent.reset();
 
         args = new String[]{"summary", "--month", String.valueOf(currentMonthNumber)};
+        ExpenseTrackerCLI.main(args);
+        String expected = "Total expenses for month " + currentMonth + ": $30,53" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    void testSummaryByMonthAndCategory() throws IOException {
+        Calendar calendar = Calendar.getInstance();
+        int currentMonthNumber = calendar.get(Calendar.MONTH) + 1;
+        String currentMonth = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
+
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
+        ExpenseTrackerCLI.main(args);
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "Food"};
+        ExpenseTrackerCLI.main(args);
+        args = new String[] {"add", "--description", "TV", "--amount", "859.99", "--category", "entertainment"};
+        ExpenseTrackerCLI.main(args);
+        outContent.reset();
+
+        args = new String[]{"summary", "--month", String.valueOf(currentMonthNumber), "--category", "food"};
         ExpenseTrackerCLI.main(args);
         String expected = "Total expenses for month " + currentMonth + ": $30,53" + System.lineSeparator();
         assertEquals(expected, outContent.toString());

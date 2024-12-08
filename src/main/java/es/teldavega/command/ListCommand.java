@@ -1,8 +1,10 @@
 package es.teldavega.command;
 
+import es.teldavega.expense.Expense;
 import es.teldavega.expense.ExpenseManager;
 
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 public class ListCommand extends Command {
     public ListCommand(ExpenseManager expenseManager) {
@@ -15,6 +17,8 @@ public class ListCommand extends Command {
             System.out.println("No expenses found");
             return;
         }
+        Map<Integer, Expense> expenses = expenseManager.getExpenses();
+        filterExpensesByCategory(expenses);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm z yyyy");
 
         // Define format for the table
@@ -35,8 +39,4 @@ public class ListCommand extends Command {
         return true;
     }
 
-    @Override
-    public void setParser(String[] args) {
-        // No parser is required for this command
-    }
 }
