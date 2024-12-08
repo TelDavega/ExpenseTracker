@@ -100,10 +100,11 @@ class ExpenseTrackerCLITest {
             "'update --id 1 --description dinner --amount -10', 'Invalid amount'",
             "'update --id 1 --description dinner --amount abc', 'Invalid amount'",
             "'update --id 1 --description dinner --amount 10.123', 'Invalid amount'",
-            "'update --id 1 --description dinner --amount 10.53 --id 2', 'Too many arguments provided. Please provide an ID, description, and/or amount.'",
+            "'update --id 1 --description dinner --amount 10.53 --id 2', " +
+                    "'Too many arguments provided. Please provide an ID, description, category, and/or amount.'",
             "'update --id 4 --description dinner --amount 10.53', 'Expense not found (ID: 4)'",
             "'update', 'No arguments provided. Please provide an ID.'",
-            "'update --id 1', 'Description or amount are required'",
+            "'update --id 1', 'Description, amount, or category is required'",
             "'delete', 'No arguments provided. Please provide an ID.'",
             "'delete --id 4', 'Expense not found (ID: 4)'",
     })

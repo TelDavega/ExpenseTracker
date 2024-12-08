@@ -15,7 +15,7 @@ public class Expense {
         this.description = description;
         this.amount = amount;
         this.date = date;
-        this.category = category;
+        this.category = category.toUpperCase();
     }
 
     public int getId() {
@@ -55,7 +55,7 @@ public class Expense {
     }
 
     public void setCategory(String category) {
-        this.category = category;
+        this.category = category.toUpperCase();
     }
 
     @Override
