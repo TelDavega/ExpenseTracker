@@ -132,20 +132,21 @@ class ExpenseTrackerCLITest {
         String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
         Date date1 = new Date();
-        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "Food"};
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "FOOD"};
         ExpenseTrackerCLI.main(args);
         Date date2 = new Date();
         outContent.reset();
 
         args = new String[]{"list"};
         ExpenseTrackerCLI.main(args);
-        String headerFormat = "%-5s %-27s %-20s %-10s%n";
-        String rowFormat = "%-5d %-27s %-20s $%-9.2f%n";
+        String headerFormat = "%-5s %-27s %-20s %-20s %-10s%n";
+        String rowFormat = "%-5d %-27s %-20s %-20s $%-9.2f%n";
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm z yyyy");
 
-        String expectedHeader = String.format(headerFormat, "ID", "        Date        ", "Description  ", "Amount ");
-        String expectedRow1 = String.format(rowFormat, 1, dateFormat.format(date1), "food", 10.0);
-        String expectedRow2 = String.format(rowFormat, 2, dateFormat.format(date2), "dinner", 20.53);
+        String expectedHeader = String.format(headerFormat, "ID", "        Date        ", "Description  ","Category  ",
+                "Amount ");
+        String expectedRow1 = String.format(rowFormat, 1, dateFormat.format(date1), "food", "Food",  10.0);
+        String expectedRow2 = String.format(rowFormat, 2, dateFormat.format(date2), "dinner", "Food", 20.53);
         String expected = expectedHeader + expectedRow1 + expectedRow2;
         assertEquals(expected, outContent.toString());
     }

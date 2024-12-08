@@ -18,12 +18,15 @@ public class ListCommand extends Command {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm z yyyy");
 
         // Define format for the table
-        String headerFormat = "%-5s %-27s %-20s %-10s%n";
-        String rowFormat = "%-5d %-27s %-20s $%-9.2f%n";
-        System.out.printf(headerFormat, "ID", "        Date        ", "Description  ", "Amount ");
-        expenseManager.getExpenses().values().forEach(expense -> System.out.printf(rowFormat, expense.getId(),
+        String headerFormat = "%-5s %-27s %-20s %-20s %-10s%n";
+        String rowFormat = "%-5d %-27s %-20s %-20s $%-9.2f%n";
+        System.out.printf(headerFormat, "ID", "        Date        ", "Description  ", "Category  ", "Amount ");
+        expenseManager.getExpenses().values().forEach(expense ->
+                System.out.printf(rowFormat, expense.getId(),
                 dateFormat.format(expense.getDate()),
-                expense.getDescription(), expense.getAmount()));
+                expense.getDescription(),
+                expense.getCategory(),
+                expense.getAmount()));
     }
 
     @Override

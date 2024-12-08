@@ -10,6 +10,10 @@ import java.util.Date;
 public class AddCommand extends Command {
 
 
+    public static final String CATEGORY = "category";
+    public static final String DESCRIPTION = "description";
+    public static final String AMOUNT = "amount";
+
     public AddCommand(ExpenseManager expenseManager) {
         super(expenseManager);
     }
@@ -17,20 +21,20 @@ public class AddCommand extends Command {
     @Override
     public void performExecute(String[] args) throws IOException {
         int id = expenseManager.getExpenses().size() + 1;
-        String description = parser.getString("description");
-        BigDecimal amount = parser.getBigDecimal("amount");
-        String category = parser.getString("category");
+        String description = parser.getString(DESCRIPTION);
+        BigDecimal amount = parser.getBigDecimal(AMOUNT);
+        String category = parser.getString(CATEGORY);
         addExpense(id, description, amount, category);
     }
 
     @Override
     public boolean validArguments(String[] args) {
-        String description = parser.getString("description");
-        String category = parser.getString("category");
+        String description = parser.getString(DESCRIPTION);
+        String category = parser.getString(CATEGORY);
         BigDecimal amount = null;
 
         try {
-            amount = parser.getBigDecimal("amount");
+            amount = parser.getBigDecimal(AMOUNT);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return false;
@@ -53,8 +57,8 @@ public class AddCommand extends Command {
             System.out.println("Description, amount and category are required");
             return false;
         }
-        return validAmount(amount) && validStringArgument(description, "description")
-                && validStringArgument(category, "category");
+        return validAmount(amount) && validStringArgument(description, DESCRIPTION)
+                && validStringArgument(category, CATEGORY);
     }
 
     private boolean validAmount(BigDecimal amount) {

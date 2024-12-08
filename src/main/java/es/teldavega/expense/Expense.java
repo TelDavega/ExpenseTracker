@@ -51,7 +51,7 @@ public class Expense {
     }
 
     public String getCategory() {
-        return category;
+        return Character.toUpperCase(category.charAt(0)) + category.substring(1).toLowerCase();
     }
 
     public void setCategory(String category) {
