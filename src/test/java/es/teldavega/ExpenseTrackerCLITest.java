@@ -41,12 +41,12 @@ class ExpenseTrackerCLITest {
 
     @Test
     void testAddExpense() throws IOException {
-        String[] args = {"add", "--description", "food", "--amount", "10"};
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
         String expected = "Expense added successfully (ID: 1)" + System.lineSeparator();
         assertEquals(expected, outContent.toString());
         outContent.reset();
-        args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
         expected = "Expense added successfully (ID: 2)" + System.lineSeparator();
         assertEquals(expected, outContent.toString());
@@ -54,11 +54,11 @@ class ExpenseTrackerCLITest {
 
     @ParameterizedTest
     @CsvSource({
-            "'add --description  --amount 10', 'Invalid description'",
-            "'add --description dinner --amount -10', 'Invalid amount'",
-            "'add --description dinner --amount abc', 'Invalid amount'",
-            "'add --description dinner --amount 10.123', 'Invalid amount'",
-            "'add', 'Description and amount are required'"
+            "'add --description  --amount 10 --category Food', 'Invalid description'",
+            "'add --description dinner --amount -10 --category Food', 'Invalid amount'",
+            "'add --description dinner --amount abc --category Food', 'Invalid amount'",
+            "'add --description dinner --amount 10.123 --category Food', 'Invalid amount'",
+            "'add', 'Description, amount and category are required'"
     })
     void testAddExpenseWithInvalidInputs(String inputArgs, String expectedOutput) throws IOException {
         String[] args = inputArgs.split(" ");
@@ -70,9 +70,8 @@ class ExpenseTrackerCLITest {
 
     @Test
     void testUpdateExpense() throws IOException {
-        String[] args = {"add", "--description", "food", "--amount", "10"};
-        ExpenseTrackerCLI.main(args);
-        outContent.reset();
+        addDefaultExpense();
+        String[] args;
 
         args = new String[]{"update", "--id", "1", "--description", "dinner", "--amount", "20.53"};
         ExpenseTrackerCLI.main(args);
@@ -90,6 +89,12 @@ class ExpenseTrackerCLITest {
         assertEquals(expected, outContent.toString());
     }
 
+    private void addDefaultExpense() throws IOException {
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
+        ExpenseTrackerCLI.main(args);
+        outContent.reset();
+    }
+
     @ParameterizedTest
     @CsvSource({
             "'update --id 1 --description dinner --amount -10', 'Invalid amount'",
@@ -103,10 +108,9 @@ class ExpenseTrackerCLITest {
             "'delete --id 4', 'Expense not found (ID: 4)'",
     })
     void testUpdateAndDeleteExpenseWithInvalidInputs(String inputArgs, String expectedOutput) throws IOException {
-        String[] args = {"add", "--description", "food", "--amount", "10"};
-        ExpenseTrackerCLI.main(args);
-        outContent.reset();
-         args = inputArgs.split(" ");
+        addDefaultExpense();
+        String[] args;
+        args = inputArgs.split(" ");
         ExpenseTrackerCLI.main(args);
 
         String expected = expectedOutput + System.lineSeparator();
@@ -115,11 +119,8 @@ class ExpenseTrackerCLITest {
 
     @Test
     void testDeleteExpense() throws IOException {
-        String[] args = {"add", "--description", "food", "--amount", "10"};
-        ExpenseTrackerCLI.main(args);
-        outContent.reset();
-
-        args = new String[]{"delete", "--id", "1"};
+        addDefaultExpense();
+        String [] args = new String[]{"delete", "--id", "1"};
         ExpenseTrackerCLI.main(args);
         String expected = "Expense deleted successfully" + System.lineSeparator();
         assertEquals(expected, outContent.toString());
@@ -128,10 +129,10 @@ class ExpenseTrackerCLITest {
 
     @Test
     void testListExpenses() throws IOException {
-        String[] args = {"add", "--description", "food", "--amount", "10"};
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
         Date date1 = new Date();
-        args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
         Date date2 = new Date();
         outContent.reset();
@@ -159,9 +160,9 @@ class ExpenseTrackerCLITest {
 
     @Test
     void testSummary() throws IOException {
-        String[] args = {"add", "--description", "food", "--amount", "10"};
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
-        args = new String[]{"add", "--description", "dinner", "--amount", "20.5"};
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.5", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
         outContent.reset();
 
@@ -177,9 +178,9 @@ class ExpenseTrackerCLITest {
         int currentMonthNumber = calendar.get(Calendar.MONTH) + 1;
         String currentMonth = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
 
-        String[] args = {"add", "--description", "food", "--amount", "10"};
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
-        args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
         outContent.reset();
 
@@ -204,9 +205,9 @@ class ExpenseTrackerCLITest {
             "'summary --month 0', 'Invalid month'",
     })
     void testSummaryByMonthInvalid() throws IOException {
-        String[] args = {"add", "--description", "food", "--amount", "10"};
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
-        args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
         outContent.reset();
 
@@ -222,9 +223,9 @@ class ExpenseTrackerCLITest {
         int currentMonthNumber = calendar.get(Calendar.MONTH) + 1;
         calendar.add(Calendar.MONTH, 1);
         String nextMonth = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
-        String[] args = {"add", "--description", "food", "--amount", "10"};
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
-        args = new String[]{"add", "--description", "dinner", "--amount", "20.53"};
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "Food"};
         ExpenseTrackerCLI.main(args);
         outContent.reset();
         int nextMonthNumber;
