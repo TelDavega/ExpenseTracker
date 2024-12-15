@@ -10,25 +10,4 @@ public class DefaultArgumentParser extends ArgumentParser {
         super(args, "--");
     }
 
-    public String getString(String string) {
-        return arguments.get(key + string);
-    }
-
-    public Integer getInt(String integer) {
-        String value = arguments.get(key + integer);
-        return value != null ? Integer.parseInt(value) : null;
-    }
-
-    public BigDecimal getBigDecimal(String bigDecimal) {
-        String value = arguments.get(key + bigDecimal);
-        if (value == null) {
-            return null;
-        }
-        try {
-            return new BigDecimal(value);
-        } catch (NumberFormatException e) {
-           throw new IllegalArgumentException("Invalid amount");
-        }
-    }
-
 }
