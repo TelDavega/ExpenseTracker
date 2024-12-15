@@ -1,5 +1,6 @@
 package es.teldavega.command;
 
+import es.teldavega.arguments.ArgumentParser;
 import es.teldavega.arguments.DefaultArgumentParser;
 import es.teldavega.expense.Expense;
 import es.teldavega.expense.ExpenseManager;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 public abstract class Command {
     protected final ExpenseManager expenseManager;
-    protected DefaultArgumentParser parser;
+    protected ArgumentParser parser;
 
     protected Command(ExpenseManager expenseManager) {
         this.expenseManager = expenseManager;
