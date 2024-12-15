@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -29,6 +30,8 @@ class ExpenseTrackerCLITest {
     @BeforeEach
     void setUp() throws IOException {
         Path path = Paths.get("expenses.json");
+        Files.deleteIfExists(path);
+        path = Paths.get("budget.json");
         Files.deleteIfExists(path);
         System.setOut(new PrintStream(outContent));
     }
@@ -289,5 +292,66 @@ class ExpenseTrackerCLITest {
         String expected = "No expenses found for month " + nextMonth + System.lineSeparator();
         assertEquals(expected, outContent.toString());
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'budget --set 50.01', 'Budget updated successfully'",
+            "'budget --update 20', 'Budget updated successfully'",
+            "'budget --delete', 'Budget deleted successfully'",
+            "'budget', 'No arguments provided. Please provide a budget.'",
+            "'budget --set abc', 'Invalid budget'",
+    })
+    void testBudget(String inputArgs, String expectedOutput) throws IOException {
+        String[] args = inputArgs.split(" ");
+        ExpenseTrackerCLI.main(args);
+        String expected = expectedOutput + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    void testExceedBudget() throws IOException {
+        String[] args = {"budget", "--set", "50"};
+        ExpenseTrackerCLI.main(args);
+        outContent.reset();
+        args = new String[]{"add", "--description", "food", "--amount", "60", "--category", "Food"};
+        ExpenseTrackerCLI.main(args);
+        String expected = "Warning: You have exceeded your budget limit by 10" + System.lineSeparator() +
+                "Expense added successfully (ID: 1)" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+        outContent.reset();
+        args = new String[]{"add", "--description", "movie", "--amount", "10.52", "--category", "Entertainment"};
+        ExpenseTrackerCLI.main(args);
+        expected = "Warning: You have exceeded your budget limit by 20.52" + System.lineSeparator() +
+                "Expense added successfully (ID: 2)" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    void testResetMonthlyBudget() throws IOException {
+        String[] args = {"budget", "--set", "100"};
+        ExpenseTrackerCLI.main(args);
+        outContent.reset();
+
+        args = new String[]{"add", "--description", "groceries", "--amount", "30", "--category", "Food"};
+        ExpenseTrackerCLI.main(args);
+        String expected = "Expense added successfully (ID: 1)" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+        outContent.reset();
+
+        Path budgetFilePath = Paths.get("budget.json");
+        String budgetContent = Files.readString(budgetFilePath);
+        budgetContent = budgetContent.replace(
+                LocalDate.now().toString(),
+                LocalDate.now().minusMonths(1).toString()
+        );
+        Files.writeString(budgetFilePath, budgetContent);
+
+
+        args = new String[]{"add", "--description", "gym", "--amount", "20", "--category", "Health"};
+        ExpenseTrackerCLI.main(args);
+        expected = "Expense added successfully (ID: 2)" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+    }
+
 
 }

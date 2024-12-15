@@ -6,6 +6,7 @@ import es.teldavega.expense.ExpenseManager;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 public class AddCommand extends Command {
 
@@ -20,11 +21,26 @@ public class AddCommand extends Command {
 
     @Override
     public void performExecute(String[] args) throws IOException {
+        expenseManager.checkAndResetMonthlyBudget();
         int id = expenseManager.getExpenses().size() + 1;
         String description = parser.getString(DESCRIPTION);
         BigDecimal amount = parser.getBigDecimal(AMOUNT);
         String category = parser.getString(CATEGORY);
+
+        recalculateBudget(amount);
         addExpense(id, description, amount, category);
+    }
+
+    private void recalculateBudget(BigDecimal amount) {
+        BigDecimal currentBudget = expenseManager.getCurrentBudget();
+        if (Objects.equals(currentBudget, BigDecimal.ZERO)) {
+            return;
+        }
+        BigDecimal newBudget = currentBudget.subtract(amount);
+        if (newBudget.compareTo(BigDecimal.ZERO) < 0) {
+            System.out.println("Warning: You have exceeded your budget limit by " + newBudget.abs());
+        }
+        expenseManager.setCurrentBudget(newBudget);
     }
 
     @Override
