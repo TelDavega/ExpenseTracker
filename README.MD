@@ -3,7 +3,7 @@
 ## Description
 **Expense Tracker**  is a project used to manage your expenses by CLI.
 
-This project is part of the [Roadmap.sh](https://roadmap.sh/backend/projects) backend projects.
+This project is part of the [Roadmap.sh](https://roadmap.sh/projects/expense-tracker) backend projects.
 
 ## Requirements
 Before compiling and running the program, make sure you have the following installed:
