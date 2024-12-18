@@ -34,7 +34,7 @@ This command will compile the program and create a JAR file in the `target` dire
 To run the program, navigate to the `target` directory and run the following command:
 
 ```bash
-java -jar ExpenseTracker-1.0-SNAPSHOT-jar-with-dependencies.jar add --description "food" --amount 10
+java -jar ExpenseTracker-1.0-SNAPSHOT-jar-with-dependencies.jar add --description "food" --amount 10 --category "groceries"
 ```
 
 This command will add a new expense with the name "food" to the expense list.
@@ -64,7 +64,7 @@ sudo mv expense-tracker /usr/local/bin
 Now you can run the program by typing `expense-tracker` in your terminal:
 
 ```bash
-expense-tracker add --description "food" --amount 10
+expense-tracker add --description "food" --amount 10 --category "groceries"
 ```
 
 Create a batch file with the following content:
@@ -79,21 +79,28 @@ Save the file as `expense-tracker.bat` and move it to a directory in your PATH.
 Now you can run the program by typing `expense-tracker` in your terminal:
 
 ```bash
-expense-tracker add --description "food" --amount 10
+expense-tracker add --description "food" --amount 10 --category "groceries"
 ```
 
 ## Usage
 
 The program supports the following commands:
 
-- `add --description <description> --amount <amount>`: Add a new expense to the expense list.
+- `add --description <description> --amount <amount> --category <category>`: Add a new expense to the expense list.
 - `update --id <expense-id> --description <description>`: Update description of the expense with the given ID.
 - `update --id <expense-id> --amount <amount>`: Update amount of the expense with the given ID.
+- `update --id <expense-id> --category <category>`: Update category of the expense with the given ID.
 - `update --id <expense-id> --description <description> --amount <amount>`: Update description and amount of the expense with the given ID.
 - `delete --id <expense-id>`: Delete the expense with the given ID.
 - `list`: List all expenses in the expense list.
+- `list --category <category>`: List all expenses in the expense list with the given category.
 - `summary`: Show the total amount of expenses.
 - `summary --month <month>`: Show the total amount of expenses for the given month.
+- `summary --category <category>`: Show the total amount of expenses for the given category.
+- `budget --set <amount>`: Set the budget for the month. If budged is set, the program will show a warning when budget is exceed.
+- `budget --update <amount>`: Update the budget for the month.
+- `budget --delete`: Delete the budget for the month.
+- `export --path <path>`: Export the expenses to a CSV file.
 
 ## Example
 

@@ -19,6 +19,7 @@ public class UpdateCommand extends Command {
         int id = parser.getInt("id");
         String description = parser.getString("description");
         BigDecimal amount = parser.getBigDecimal("amount");
+        String category = parser.getString("category");
 
         if (description != null) {
             expenseManager.getExpenses().get(id).setDescription(description);
@@ -26,6 +27,10 @@ public class UpdateCommand extends Command {
 
         if (amount != null) {
             expenseManager.getExpenses().get(id).setAmount(amount);
+        }
+
+        if (category != null) {
+            expenseManager.getExpenses().get(id).setCategory(category);
         }
 
         System.out.println("Expense updated successfully (ID: " + id + ")");
@@ -41,6 +46,7 @@ public class UpdateCommand extends Command {
         int id = parser.getInt("id");
         if (!validId(id)) return false;
         String description = parser.getString("description");
+        String category = parser.getString("category");
         BigDecimal amount = null;
         try {
             amount = parser.getBigDecimal("amount");
@@ -50,8 +56,8 @@ public class UpdateCommand extends Command {
         }
         if (!validAmount(amount)) return false;
 
-        if (description == null && amount == null) {
-            System.out.println("Description or amount are required");
+        if (description == null && amount == null && category == null) {
+            System.out.println("Description, amount, or category is required");
             return false;
         }
 
@@ -83,8 +89,8 @@ public class UpdateCommand extends Command {
             return false;
         }
 
-        if (args.length > 7) {
-            System.out.println("Too many arguments provided. Please provide an ID, description, and/or amount.");
+        if (args.length > 8) {
+            System.out.println("Too many arguments provided. Please provide an ID, description, category, and/or amount.");
             return false;
         }
         return true;

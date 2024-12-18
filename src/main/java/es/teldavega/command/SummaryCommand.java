@@ -7,6 +7,7 @@ import es.teldavega.expense.ExpenseManager;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Map;
 
 public class SummaryCommand extends Command {
 
@@ -29,8 +30,10 @@ public class SummaryCommand extends Command {
             }
             BigDecimal total = BigDecimal.ZERO;
             Calendar calendar = Calendar.getInstance();
+            Map<Integer, Expense> expenses = expenseManager.getExpenses();
+            filterExpensesByCategory(expenses);
 
-            for (Expense expense : expenseManager.getExpenses().values()) {
+            for (Expense expense : expenses.values()) {
                 calendar.setTime(expense.getDate());
                 if ((calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR))
                         && (calendar.get(Calendar.MONTH) + 1 == month)) {
