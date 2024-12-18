@@ -353,5 +353,64 @@ class ExpenseTrackerCLITest {
         assertEquals(expected, outContent.toString());
     }
 
+    @Test
+    void testExport() throws IOException {
+        String[] args = {"add", "--description", "food", "--amount", "10", "--category", "Food"};
+        ExpenseTrackerCLI.main(args);
+        args = new String[]{"add", "--description", "dinner", "--amount", "20.53", "--category", "Food"};
+        ExpenseTrackerCLI.main(args);
+        outContent.reset();
+
+        args = new String[]{"export", "--path", "expenses.csv"};
+        ExpenseTrackerCLI.main(args);
+        String expected = "Expenses exported successfully to expenses.csv" + System.lineSeparator();
+        assertEquals(expected, outContent.toString());
+        checkCsvFile();
+    }
+
+    private void checkCsvFile() {
+        Path path = Paths.get("expenses.csv");
+        assertTrue(Files.exists(path));
+
+        String expectedHeader = "id,description,amount,date,category" + System.lineSeparator();
+        String expectedRow1 = "1,food,10,";
+        String expectedRow2 = "2,dinner,20.53,";
+
+        String datePattern = "\\w{3} \\w{3} \\d{2} \\d{2}:\\d{2}:\\d{2} [A-Z]{3} \\d{4}";
+
+        try {
+            String content = Files.readString(path);
+
+            String[] lines = content.split(System.lineSeparator());
+
+            assertEquals(expectedHeader.trim(), lines[0].trim());
+
+            assertTrue(lines[1].startsWith(expectedRow1));
+            String date1 = extractDateFromLine(lines[1]);
+            assertTrue(date1.matches(datePattern), "Row 1 date format is invalid");
+            assertTrue(lines[1].endsWith(",Food"));
+
+            assertTrue(lines[2].startsWith(expectedRow2));
+            String date2 = extractDateFromLine(lines[2]);
+            assertTrue(date2.matches(datePattern), "Row 2 date format is invalid");
+            assertTrue(lines[2].endsWith(",Food"));
+
+        } catch (IOException e) {
+            fail("Error reading expenses.csv file: " + e.getMessage());
+        }
+    }
+
+
+    private String extractDateFromLine(String line) {
+        String[] fields = line.split(",");
+        if (fields.length >= 4) {
+            return fields[3];
+        } else {
+            fail("CSV line has an unexpected format: " + line);
+            return "";
+        }
+    }
+
+
 
 }

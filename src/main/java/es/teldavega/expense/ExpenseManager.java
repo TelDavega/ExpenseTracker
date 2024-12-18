@@ -18,6 +18,7 @@ public class ExpenseManager {
     public static final String BUDGET_LIMIT = "budgetLimit";
     public static final String CURRENT_MONTH_BUDGET = "currentMonthBudget";
     public static final String LAST_UPDATE = "lastUpdate";
+    public static final String EXPENSES_JSON = "expenses.json";
     private Map<Integer, Expense> expenses = new HashMap<>();
     private final Map<String, Command> commands = new HashMap<>();
     private BigDecimal budgetLimit = BigDecimal.ZERO;
@@ -43,6 +44,7 @@ public class ExpenseManager {
         commands.put("list", new ListCommand(this));
         commands.put("summary", new SummaryCommand(this));
         commands.put("budget", new BudgetCommand(this));
+        commands.put("export", new ExportCommand(this));
     }
 
     public void executeCommand(String commandName, String[] args) throws IOException {
@@ -55,9 +57,9 @@ public class ExpenseManager {
     }
 
     public void writeExpensesFile() throws IOException {
-        Path path = Paths.get("expenses.json");
+        Path path = Paths.get(EXPENSES_JSON);
         Files.deleteIfExists(path);
-        try (Writer writer = new FileWriter("expenses.json")) {
+        try (Writer writer = new FileWriter(EXPENSES_JSON)) {
             gson.toJson(expenses, writer);
         } catch (IOException e) {
             System.err.println("Error writing expenses.json: " + e.getMessage());
@@ -66,7 +68,7 @@ public class ExpenseManager {
 
     private Map<Integer, Expense> readExpensesFile() {
 
-        File file = new File("expenses.json");
+        File file = new File(EXPENSES_JSON);
 
         if (!file.exists() || file.length() == 0) {
             return new HashMap<>();
